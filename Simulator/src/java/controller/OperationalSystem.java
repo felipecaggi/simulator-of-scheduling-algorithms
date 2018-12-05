@@ -5,66 +5,33 @@ import model.CPU;
 import model.Memory;
 
 public class OperationalSystem {
+    
+    private ShortTermScheduler scheduler;
+    
+    private final Memory memory;
+    private final CPU cpu;
 
-    public OperationalSystem() {
+    public OperationalSystem(CPU cpu, Memory memory) {
+        this.cpu = cpu;
+        this.memory = memory;
     }
 
-    private String state;
-
-    /**
-     *
-     */
-    public void powerOn() {
-
+    public void setProcessInformation(String name, int priority, int time, String type) {
+        
+        memory.addProcess(name, priority, time, type);
+        
     }
-
-    /**
-     *
-     */
-    public void powerOff() {
-
+    
+    public void setProcessInformation(String name, int priority, int ioTime, int processingTimeIO, int time, String type) {
+        
+        memory.addProcess(name, priority, ioTime, processingTimeIO, time, type);
+        
     }
-
-    /**
-     *
-     */
-    public void setCpuInformation(int slice, int contextSwitch) {
-
-    }
-
-    /**
-     *
-     */
-    public void setProcessInformation(String name, String type, int priority, int time) {
-
-    }
-
-    /**
-     *
-     */
-    public void setSchedulerInformation(String algorithm) {
-
-    }
-
-    /**
-     *
-     */
-    public void getCpuInformation() {
-
-    }
-
-    /**
-     *
-     */
-    public void getProcessInformation() {
-
-    }
-
-    /**
-     *
-     */
-    public void getSchedulerInformation() {
-
+    
+    public void startSimulator(int algorithm) {
+        
+        scheduler = new ShortTermScheduler(algorithm, cpu, memory);
+        
     }
 
 }
