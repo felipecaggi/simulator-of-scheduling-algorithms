@@ -17,6 +17,13 @@ public class Process {
     private String type;
 
     private String state;
+    
+    public Process(String name, int time, String type) {
+        this.name = name;
+        this.time = time;
+        this.type = type;
+        state = "Ready";
+    }
 
     public Process(String name, int priority, int time, String type) {
         this.name = name;
@@ -26,15 +33,28 @@ public class Process {
         state = "Ready";
     }
 
-    public Process(String name, int priority, int ioTime, int processingTimeIO, int time, String type) {
+    public Process(String name, int ioTime, int processingTimeIO, int time, String type) {
         this.name = name;
-        this.priority = priority;
         this.ioTime = ioTime;
         this.processingTimeIO = processingTimeIO;
         this.time = time;
         timeWaitIO = 0;
         this.type = type;
         state = "Ready";
+    }    
+    
+    public Process(String name, int ioTime, int processingTimeIO, int time, int timeWaitIO, String type) {
+        this.name = name;
+        this.ioTime = ioTime;
+        this.processingTimeIO = processingTimeIO;
+        this.time = time;
+        this.timeWaitIO = timeWaitIO;
+        this.type = type;
+        state = "Ready";
+    }
+
+    Process() {
+        state = "Ready";        
     }
 
     public String getName() {

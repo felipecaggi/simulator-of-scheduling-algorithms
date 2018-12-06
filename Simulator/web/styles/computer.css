@@ -1,0 +1,566 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Dec 5, 2018, 11:31:56 AM
+    Author     : felipecaggi
+*/
+
+body {
+    margin: 0;
+}
+
+.outer {
+    display: table;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.middle {
+    display: table-cell;
+    vertical-align: middle;
+    /*background-color: greenyellow;*/
+}
+
+.computer {
+   /*background-color: blue;*/
+   text-align: center;
+}
+
+.monitor, .computer-gabinet {
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+/*------------------ MONITOR ------------------*/
+
+.screen {
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    width: 720px;
+    height: 420px;
+    border: 30px solid black;
+    border-radius: 20px;    
+    background-color: rgb(25,25,25);
+    -webkit-box-shadow: 0 2px 6px rgba(0,0,0,.2);
+    -moz-box-shadow: 0 2px 6px rgba(0,0,0,.2);
+    box-shadow: 0 2px 6px rgba(0,0,0,.2);
+    min-width: 320px;
+    min-height: 338px;
+    overflow: hidden;
+}
+
+.foot {
+    width: 300px;
+    margin: auto;
+}
+
+.foot-p1, .foot-p2, .foot-p3 {
+    margin: auto;
+    background-color: black;
+}
+
+.foot-p1 {
+    width: 60px;
+    height: 30px;
+}
+
+.foot-p2 {
+    width: 120px;
+    height: 10px;
+    
+}
+
+.foot-p3 {
+    width: 150px;
+    height: 10px;
+}
+
+    /*-------------------- ALGORITHMS --------------------*/
+    .algorithms {
+        background-color: white;
+        display: block;
+    }
+
+    .row {
+        display: flex;
+    }
+
+    .algorithms input[type=submit] {
+        font-size: 20pt;
+        font-weight: bold; 
+        color: white;
+        background-color: green;
+        display: table;
+        position: absolute;
+        height: 45%;
+        width: 50%;
+        border: 5px solid black; 
+        border-radius:10px;
+    }
+
+    input[type=submit]:hover {
+        background-color: blue;
+    }
+
+    .priority, .roundRobin {
+        top: 45%;
+    }
+
+    .sjf, .roundRobin {
+        left: 50%;
+    }
+
+    .algorithm-name {
+        display: table-cell;
+        vertical-align: middle;
+    }
+    
+
+    /*-------------------- DOCBAR --------------------*/
+    .docbar {
+        position: absolute;
+        top: 90%;
+        width: 100%;
+        height: 10%;
+        display: flex;
+        background-color: grey;
+    }
+    
+    a.step {
+        flex: 3;
+        text-decoration: none;
+        color: black;
+        font-weight: bold;
+        background-color: whitesmoke;
+        opacity: 0.7;
+        margin: 0 2px;
+        border-radius: 2px;
+    }
+    
+    a.play {
+        flex: 1;
+    }
+    
+    a.step:hover {
+        opacity: 1;
+        
+    }
+    
+    .step1, .step2, .step3, .step4 {
+        
+        height: 100%;
+        padding-top: 7.5px;
+    }
+    
+    .step4 {
+        background-color: greenyellow;
+    }
+    
+    .step p {
+        margin: 0;
+    }
+    
+    
+
+/*------------------ GABINETE ------------------*/
+
+.computer-gabinet {
+    margin-left: 50px;
+    width: 250px;
+    height: 580px;
+    background-color: black ;
+    border-radius: 20px;
+    position:relative;
+    border-color: whitesmoke;
+}
+
+.power-button {
+    content:"";
+    width: 30px;
+    height: 30px;
+    top: 450px;
+    left: 105px;
+    background-color: black;
+    position: absolute;
+    border: 5px solid white;
+    border-radius: 100%;
+}
+
+.power-button:hover {
+    background-color: white;
+}
+
+/*.computer-gabinet {
+   width:300px;
+   line-height:100px;
+   height:100px;
+   background:#000;
+   position:relative;
+   text-align:center;
+   color:#FFF
+}
+ 
+.computer-gabinet:after {
+   content:"after";
+   width:200px;
+   line-height:40px;
+   height:40px;
+   background:#ff0000;
+   position:absolute;
+   top:40px;
+   left:0;
+   color:#FFF;
+   text-align:center
+}*/
+
+
+
+
+    /*-------------------- MEMORY --------------------*/
+    .indicate {
+        position: absolute;
+        width: 13   0px;
+        height: 2px;
+        top: 12.5px;
+        left: 120px;
+        background-color: greenyellow;
+    }
+
+    .memory {
+        width: 120px;
+        height: 30px;
+        top: 50px;
+        left: 65px;
+        background-color: greenyellow;
+        position: absolute;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .memory-chip {
+        width: 100px;
+        height: 15px;
+        top: 5.5px;
+        left: 10px;
+        position: absolute;
+    }
+
+    .chip {
+        background-color: black;
+        position: relative;
+        display: inline-block;
+        width: 7.5px;
+        height: 15px;
+        margin: 0px 2px;
+    }
+
+    .pin-connection1 {
+        width: 30px;
+        height: 10px;
+        top: 30px;
+        left: 10px;
+        background-color: gold;
+        position: absolute;
+    }
+
+    .pin-connection2 {
+        width: 60px;
+        height: 10px;
+        top: 30px;
+        left: 50px;
+        background-color: gold;
+        position: absolute;
+    }
+
+    .queues {
+        position: absolute;
+        left: 250px;
+        width: 300px;
+        
+    }
+    
+    .queue {
+        margin-top: 50px;
+        background-color: greenyellow;
+    }
+    
+    /*-------------------- CPU --------------------*/
+    .cpu {
+        width: 120px;
+        height: 120px;
+        top: 120px;
+        left: 65px;
+        background-color: green;
+        position: absolute;
+        border-radius: 5px;
+    }
+
+    .cpu-chip {
+        background-color: azure;
+        width: 60%;
+        height: 60%;
+        top: 20%;
+        left: 20%;
+        position: absolute;
+        border-radius: 5px;
+    }
+    
+    .cpu-process p {
+        position: absolute;
+        top: -33px;
+        left: 21px;
+        font-weight: bolder;
+        font-size: 30pt;
+        color: green;
+    }
+    
+    .connector-group {
+        position: absolute;
+        width: 100%;
+        display: inline-block;
+        top: 0;
+        left: 0;
+    }
+    
+    .connector1, .connector2, .connector3, .connector4 {
+        background-color: gold;
+        position: relative;
+        display: inline-block;
+        width: 7.5px;
+        height: 10px;
+        margin: 0px 2px;
+    }
+    
+    .group1 {
+        top: -18px;
+    }
+    
+    .group2, .group4 {
+        top: 25px;
+        transform: rotate(90deg);
+    }
+    
+    .group2 {
+        left: 42px;
+    }
+    
+    .group4 {
+        left: -40px;
+    }
+    
+    .group3 {
+        top: 64px;
+    }
+    
+    .cpu-settings {
+        position: absolute;
+        left: -106px;
+        top: 130px;
+        width: 300px;
+    }
+
+    /*-------------------- MEMORY TABLE --------------------*/
+    .queue-title {
+        font-weight: bolder;
+    }
+    
+    table, th, td {
+        margin: 0;
+        padding: 0;
+    }
+
+    .ready-queue-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    
+    th, td {
+        border-bottom: 1px solid #e9e9e9;
+        font-size: 14px;
+    }
+
+    tr {
+        display: flex;
+    }
+
+    th.name-collumn, td.name-collumn{
+        flex: 1;
+    }
+
+    th.time-collumn, td.time-collumn{
+        flex: 1;
+    }
+
+    th.type-collumn, td.type-collumn{
+        flex: 1;
+    }
+
+    .name-collumn, .time-collumn, .type-collumn {
+        text-align: center;
+    }
+
+    .room, .total-price-room {
+        padding: 20px 0;
+    }
+
+    .room-quantity {
+        margin: 15px 0;   
+    }
+
+/*-------------------- ADD PROCESS --------------------*/
+.form {
+    background-color: white;
+    height: 100%;
+    padding-top: 50px;
+}
+
+.form-add-process {
+    margin-top: 40px;
+}
+
+.form input[type=submit] {
+    font-weight: bold;  
+    margin-top: 15px;
+    padding: 5px;
+    width: 150px;
+    background-color: white;
+    border-radius:10px;
+}
+
+.form .form-settings input[type=submit] {
+    font-weight: bold;  
+    margin-top: 15px;
+    padding: 5px;
+    width: 200px;
+    background-color: white;
+    border-radius:10px;
+}
+
+.form-add-process input[type=submit], .form-settings input[type=submit] {
+    color: green;
+}
+
+.form-remove-process input[type=submit] {
+    color: red;
+}
+
+.form-add-process input[type=submit]:hover, .form-settings input[type=submit]:hover {
+    color: white;
+    background-color: green;
+}
+
+.form-remove-process input[type=submit]:hover {
+    color: white;
+    background-color: red;
+}
+
+
+
+
+
+    .informations-container {
+        text-align: left;
+        background-color: black;
+    }
+    .informations-container label {
+        text-align: center;
+        font-size: 12px;
+        color: greenyellow;
+        text-transform: uppercase;
+        display: block;
+    }
+    
+    .informations-container input {
+        text-align: center;
+        font-size: 12px;
+        color: #3CB371;
+    }
+
+    .cpu-form, .formulario-cartao {
+        display: inline-block;
+        vertical-align: top;
+        margin: 10px;
+        text-align: center;
+    }
+    
+    #input-accommodation label {
+        color: white;
+        font-weight: bold;
+    }
+    
+    #input-accommodation label {
+        color: white;
+        font-weight: bold;
+    }
+    
+    .informations-container fieldset {
+        width: 80px;
+        border-radius: 5px;
+        color: white
+    }
+    
+    .informations-container input[type=text] {
+        width: 100%;
+        max-width: 50px;
+        padding: 10px 0px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    
+    
+    
+    
+    .process-form div {
+        display: inline-block;
+        margin: 0 10px;
+    }
+    
+    .process-cycle {
+        text-align: right;
+    }
+    
+    .time-left {
+        text-align: left;
+    }
+    
+    .process-form input, .process-form label {
+        display: block;
+    }
+    
+   
+
+    
+    .cpu-settings .cpu-form {
+        width: 100%;
+        width: 240px;
+        text-align: right;
+    }
+    
+    
+    .cpu-settings label {
+        color: white;
+    }
+    
+    .cpu-settings input[type=text] {
+        text-align: center;
+        background-color: black;
+        width: 90%;
+        max-width: 50px;
+        padding: 2px 0px;
+        margin: 2px 0;
+        display: inline-block;
+        border-radius: 4px;
+        box-sizing: border-box;
+        color: greenyellow;
+    }
+    
+
+    

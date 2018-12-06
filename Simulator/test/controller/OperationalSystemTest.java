@@ -15,7 +15,7 @@ public class OperationalSystemTest {
     }
     
     /**
-     * Test of startSimulator method, of class OperationalSystem.
+     * Test of startSimulator method, of class OperationalSystem1.
      */
     @Test
     public void testStartSimulator() {
@@ -29,13 +29,13 @@ public class OperationalSystemTest {
         CPU cpu = new CPU(2, 7);
         cpu.setMemory(memory);
         
-        OperationalSystem os = new OperationalSystem(cpu, memory);
+        OperationalSystem1 os = new OperationalSystem1(cpu, memory);
         
-        os.startSimulator(1);
+        os.startSimulator("fcfs");
     }
 
 //    /**
-//     * Test of setProcessInformation method, of class OperationalSystem.
+//     * Test of setProcessInformation method, of class OperationalSystem1.
 //     */
 //    @Test
 //    public void testSetProcessInformation() {

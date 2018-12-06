@@ -9,11 +9,38 @@ public class Memory {
     private Queue<Process> inputOutputRequest;
 
     private Queue<Process> queueProcess;
+    
+    private Queue<Process> concludedProcess;
 
     public Memory() {
         
         inputOutputRequest = new LinkedList<>();
         queueProcess = new LinkedList<>();
+        concludedProcess = new LinkedList<>();
+        
+    }
+    
+    public Memory(Queue<Process> queueProcess) {
+        this.queueProcess = queueProcess;
+        inputOutputRequest = new LinkedList<>();
+        concludedProcess = new LinkedList<>();
+    }
+
+    public Memory(Queue<Process> inputOutputRequest, Queue<Process> queueProcess, Queue<Process> concludedProcess) {
+        this.inputOutputRequest = inputOutputRequest;
+        this.queueProcess = queueProcess;
+        this.concludedProcess = concludedProcess;
+    }
+    
+    public void addProcess(Process process) {
+        queueProcess.add(process);
+    }
+    
+    public void addProcess(String name, int time, String type) {
+                
+        Process process = new Process(name, time, type);
+        queueProcess.add(process);
+        
     }
 
     public void addProcess(String name, int priority, int time, String type) {
@@ -23,10 +50,95 @@ public class Memory {
         
     }
     
-    public void addProcess(String name, int priority, int ioTime, int processingTimeIO, int time, String type) {
+    public void addProcess(String name, int ioTime, int processingTimeIO, int time, String type) {
         
-        Process process = new Process(name, priority, ioTime, processingTimeIO, time, type);
+        Process process = new Process(name, ioTime, processingTimeIO, time, type);
         queueProcess.add(process);
+        
+    }
+    
+    public void addProcess(String name, int ioTime, int processingTimeIO, int priority, int time, String type) {
+        
+        Process process = new Process();
+        process.setName(name);
+        process.setIoTime(ioTime);
+        process.setProcessingTimeIO(processingTimeIO);
+        process.setPriority(priority);
+        process.setTime(time);
+        process.setType(type);
+        queueProcess.add(process);
+        
+    }
+    
+    public void addProcessPriority(String name, int ioTime, int processingTimeIO, int priority, int time, String type) {
+        
+        Process process = new Process();
+        process.setName(name);
+        process.setIoTime(ioTime);
+        process.setProcessingTimeIO(processingTimeIO);
+        process.setPriority(priority);
+        process.setTime(time);
+        process.setType(type);
+        queueProcess.add(process);
+        
+    }
+    
+    public void addProcessIO(String name, int ioTime, int processingTimeIO, int time, int timeWaitIO, String type) {
+        
+        Process process = new Process(name, ioTime, processingTimeIO, time, timeWaitIO, type);
+        inputOutputRequest.add(process);
+        
+    }
+    
+    public void addProcessIOPriority(String name, int ioTime, int processingTimeIO, int priority, int time, int timeWaitIO, String type) {
+        
+        Process process = new Process();
+        process.setName(name);
+        process.setIoTime(ioTime);
+        process.setProcessingTimeIO(processingTimeIO);
+        process.setPriority(priority);
+        process.setTime(time);
+        process.setTimeWaitIO(timeWaitIO);
+        process.setType(type);
+        inputOutputRequest.add(process);
+        
+    }
+    
+    public void addProcessConcluded(String name, int ioTime, int processingTimeIO, int time, String type) {
+        
+        Process process = new Process(name, ioTime, processingTimeIO, time, type);
+        concludedProcess.add(process);
+        
+    }
+    
+    public void addProcessConcludedPriority(String name, int ioTime, int processingTimeIO, int priority, int time, String type) {
+       
+        Process process = new Process();
+        process.setName(name);
+        process.setIoTime(ioTime);
+        process.setProcessingTimeIO(processingTimeIO);
+        process.setPriority(priority);
+        process.setTime(time);
+        process.setType(type);
+        concludedProcess.add(process);
+        
+    }
+    
+    public void removeProcess() {
+        
+        Deque<Process> deque = new LinkedList<>();
+        
+        queueProcess.forEach((p) -> {
+            deque.add(p);
+        });
+        
+        deque.pollLast();
+        
+        queueProcess.clear();
+        
+        deque.forEach((p) -> {
+            queueProcess.add(p);
+        });
         
     }
     
@@ -36,9 +148,14 @@ public class Memory {
         
     }
     
+    public void concludedProcess(Process process) {
+        
+        concludedProcess.add(process);
+        
+    }
+    
     public void returnProcess(Process process) {
         
-        queueProcess.poll();
         queueProcess.add(process);
     }
     
@@ -64,11 +181,34 @@ public class Memory {
     public Queue<Process> getInputOutputRequest() {
         return inputOutputRequest;
     }
+
+    public Queue<Process> getConcludedProcess() {
+        return concludedProcess;
+    }
+    
+
+    public void setInputOutputRequest(Queue<Process> inputOutputRequest) {
+        this.inputOutputRequest = inputOutputRequest;
+    }
+
+    public void setQueueProcess(Queue<Process> queueProcess) {
+        this.queueProcess = queueProcess;
+    }
+
+    public void setConcludedProcess(Queue<Process> concludedProcess) {
+        this.concludedProcess = concludedProcess;
+    }
+    
+    
     
     public Process getProcess(){
     
-        return queueProcess.peek();
+        return queueProcess.poll();
         
+    }
+    
+    public Process firstProcess() {
+        return queueProcess.peek();
     }
 
 }
