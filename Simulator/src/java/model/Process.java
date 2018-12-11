@@ -18,11 +18,17 @@ public class Process {
 
     private String state;
     
+    private int arrivalCycleInMemory;
+    private int memoryTimeout;
+    private int cpuInputCycle;
+    
     public Process(String name, int time, String type) {
         this.name = name;
         this.time = time;
         this.type = type;
         state = "Ready";
+        arrivalCycleInMemory = 0;
+        memoryTimeout = 0;
     }
 
     public Process(String name, int priority, int time, String type) {
@@ -31,6 +37,8 @@ public class Process {
         this.time = time;
         this.type = type;
         state = "Ready";
+        arrivalCycleInMemory = 0;
+        memoryTimeout = 0;
     }
 
     public Process(String name, int ioTime, int processingTimeIO, int time, String type) {
@@ -41,6 +49,8 @@ public class Process {
         timeWaitIO = 0;
         this.type = type;
         state = "Ready";
+        arrivalCycleInMemory = 0;
+        memoryTimeout = 0;
     }    
     
     public Process(String name, int ioTime, int processingTimeIO, int time, int timeWaitIO, String type) {
@@ -51,10 +61,14 @@ public class Process {
         this.timeWaitIO = timeWaitIO;
         this.type = type;
         state = "Ready";
+        arrivalCycleInMemory = 0;
+        memoryTimeout = 0;
     }
 
     Process() {
-        state = "Ready";        
+        state = "Ready";
+        arrivalCycleInMemory = 0;
+        memoryTimeout = 0;
     }
 
     public String getName() {
@@ -120,5 +134,32 @@ public class Process {
     public void setState(String state) {
         this.state = state;
     }
+    
+    //  --------- STATISTICS -------------------------------------------------------------------------------------
+
+    public int getArrivalCycleInMemory() {
+        return arrivalCycleInMemory;
+    }
+
+    public void setArrivalCycleInMemory(int arrivalCycleInMemory) {
+        this.arrivalCycleInMemory = arrivalCycleInMemory;
+    }
+
+    public int getMemoryTimeout() {
+        return memoryTimeout;
+    }
+
+    public void setMemoryTimeout(int memoryTimeout) {
+        this.memoryTimeout = memoryTimeout;
+    }
+
+    public int getCpuInputCycle() {
+        return cpuInputCycle;
+    }
+
+    public void setCpuInputCycle(int cpuInputCycle) {
+        this.cpuInputCycle = cpuInputCycle;
+    }
+    
     
 }

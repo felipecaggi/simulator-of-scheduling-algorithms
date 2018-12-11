@@ -5,6 +5,8 @@
  */
 package model;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -28,7 +30,11 @@ public class Log {
     private Queue<Process> memoryReadyQueue;
     private Queue<Process> memoryConcludedQueue;
     
-    public Log(){}
+    private List<String> message;
+    
+    public Log(){
+        message = new LinkedList<>();
+    }
 
 //  --------- CPU -------------------------------------------------------------------------------------
 
@@ -44,65 +50,34 @@ public class Log {
     
 //  --------- PROCESS -------------------------------------------------------------------------------------    
 
-    public String getProcessName() {
-        return processName;
-    }
-
-    public int getProcessTime() {
-        return processTime;
-    }
-
-    public int getProcessCycle() {
-        return processCycle;
-    }
-
-    public int getProcessWaitTimeIO() {
-        return processWaitTimeIO;
-    }
+    public String getProcessName() {return processName;}
+    public int getProcessTime() {return processTime;}
+    public int getProcessCycle() {return processCycle;}
+    public int getProcessWaitTimeIO() {return processWaitTimeIO;}
+    public Memory getMemory() {return memory;}
     
-    public Memory getMemory() {
-        return memory;
-    }
-    
-    
-
-    public void setProcessName(String processName) {
-        this.processName = processName;
-    }
-
-    public void setProcessTime(int processTime) {
-        this.processTime = processTime;
-    }
-
-    public void setProcessCycle(int processCycle) {
-        this.processCycle = processCycle;
-    }
-
-    public void setProcessWaitTimeIO(int processWaitTimeIO) {
-        this.processWaitTimeIO = processWaitTimeIO;
-    }
-
-    public void setMemory(Memory memory) {
-        this.memory = memory;
-    }
+    public void setProcessName(String processName) {this.processName = processName;}
+    public void setProcessTime(int processTime) {this.processTime = processTime;}
+    public void setProcessCycle(int processCycle) {this.processCycle = processCycle;}
+    public void setProcessWaitTimeIO(int processWaitTimeIO) {this.processWaitTimeIO = processWaitTimeIO;}
+    public void setMemory(Memory memory) {this.memory = memory;}
     
 //  --------- MEMORY --------------------------------------------------------------------------------------    
 
-public Queue<Process> getMemoryIOQueue() {return memoryIOQueue;}
-public Queue<Process> getMemoryReadyQueue() {return memoryReadyQueue;}
+    public Queue<Process> getMemoryIOQueue() {return memoryIOQueue;}
+    public Queue<Process> getMemoryReadyQueue() {return memoryReadyQueue;}
+    public Queue<Process> getMemoryConcludedQueue() {return memoryConcludedQueue;}
 
-    public Queue<Process> getMemoryConcludedQueue() {
-        return memoryConcludedQueue;
-    }
+    public void setMemoryIOQueue(Queue<Process> memoryIOQueue) {this.memoryIOQueue = memoryIOQueue;}
+    public void setMemoryReadyQueue(Queue<Process> memoryReadyQueue) {this.memoryReadyQueue = memoryReadyQueue;}
+    public void setMemoryConcludedQueue(Queue<Process> memoryConcludedQueue) {this.memoryConcludedQueue = memoryConcludedQueue;}
 
+   //  --------- OTHERS --------------------------------------------------------------------------------------    
 
-public void setMemoryIOQueue(Queue<Process> memoryIOQueue) {this.memoryIOQueue = memoryIOQueue;}
-public void setMemoryReadyQueue(Queue<Process> memoryReadyQueue) {this.memoryReadyQueue = memoryReadyQueue;}
+    public List<String> getMessage() {return message;}
 
-    public void setMemoryConcludedQueue(Queue<Process> memoryConcludedQueue) {
-        this.memoryConcludedQueue = memoryConcludedQueue;
-    }
-
+    public void setMessage(String mensage) {this.message.add(mensage);}
     
-    
+    //  --------- STATISTICS -------------------------------------------------------------------------------------
+       
 }

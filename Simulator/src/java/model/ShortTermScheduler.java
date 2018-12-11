@@ -21,8 +21,11 @@ public class ShortTermScheduler {
         
         logs = new LinkedList<>();
         
+        
         startScheduling();
     }
+    
+
 
     /**
      *
@@ -47,6 +50,7 @@ public class ShortTermScheduler {
                 roundRobin();
                 break;
             case 2:
+                cpu.setSlice(Integer.MAX_VALUE);
                 fjs();
                 break;
             case 3:
@@ -71,93 +75,45 @@ public class ShortTermScheduler {
     public List getLog() {
         return logs;
     }
+    
+    public Memory getMemory() {
+        return memory;
+    }
+    
+    
+    
+    
+    
+    
+    private void fcfs() {
+        
+        while (0 != cpu.getMemory().getQueueProcess().size() || 0 != cpu.getMemory().getInputOutputRequest().size() || cpu.getProcess() != null){
 
-    /**
-     *
-     */
+            memory = cpu.cycle();
+            
+            test();
+   
+        }        
+        
+    }
+
     private void roundRobin() {
         while (0 != cpu.getMemory().getQueueProcess().size() || 0 != cpu.getMemory().getInputOutputRequest().size() || cpu.getProcess() != null){
 
             memory = cpu.cycle();
             
-            System.out.println("\n$$$ REQADY QUEUE OF PROCESSES");
-            for (Process p: memory.getQueueProcess()) {
-                System.err.println("Process " + p.getName());
-            }
+            test();
             
-            System.err.println("$$$ IO PROCESS QUEUE");
-            for (Process p: memory.getInputOutputRequest()) {
-                System.err.println("Process " + p.getName());
-            }
-            
-            for (Process io: memory.getInputOutputRequest()) {
-                io.setTimeWaitIO(io.getTimeWaitIO() + 1);
-                Log log = cpu.getLog();
-                if (io.getTimeWaitIO() == io.getIoTime()) {
-                    io.setTimeWaitIO(0);
-                    memory.returnProcessIO(io);
-                    memory.receiveIO(io);
-                    
-                
-                    log.setMemoryIOQueue(memory.getInputOutputRequest());
-                    log.setMemoryReadyQueue(memory.getQueueProcess());
-                    
-                }
-                log.setProcessWaitTimeIO(io.getTimeWaitIO());
-                cpu.setLog(log);
-            }
-            
-            Memory memory2 = new Memory();
-        
-            for (Process p: memory.getQueueProcess()) {
-                String name = p.getName();
-                int ioRequestTime = p.getIoTime();
-                int ioProcessingTime = p.getProcessingTimeIO();
-                int time = p.getTime();
-                String type = p.getType();
-                memory2.addProcess(name, ioRequestTime, ioProcessingTime, time, type);
-            }
-            
-            for (Process p: memory.getInputOutputRequest()) {
-                String name = p.getName();
-                int ioRequestTime = p.getIoTime();
-                int ioProcessingTime = p.getProcessingTimeIO();
-                int time = p.getTime();
-                int timeWaitIO = p.getTimeWaitIO();
-                String type = p.getType();
-                memory2.addProcessIO(name, ioRequestTime, ioProcessingTime, time, timeWaitIO, type);
-            }
-            
-            for (Process p: memory.getConcludedProcess()) {
-                String name = p.getName();
-                int ioRequestTime = p.getIoTime();
-                int ioProcessingTime = p.getProcessingTimeIO();
-                int time = p.getTime();
-                String type = p.getType();
-                memory2.addProcessConcluded(name, ioRequestTime, ioProcessingTime, time, type);
-            }
-            
-            memory = new Memory(memory2.getInputOutputRequest(), memory2.getQueueProcess(), memory2.getConcludedProcess());
-            
-            cpu.setMemory(memory);
-            
-//            Queue<Process> concludQueue = cpu.getMemory().getConcludedProcess();
-            
-            logs.add(count++, cpu.getLog());
-            cpu.clearLog();
-            
-//            Log log = cpu.getLog();
-//            log.setMemoryConcludedQueue(concludQueue);
-//            cpu.setLog(log);
         }
     }
 
-    /**
-     *
-     */
     private void fjs() {
         while (0 != cpu.getMemory().getQueueProcess().size() || 0 != cpu.getMemory().getInputOutputRequest().size() || cpu.getProcess() != null){
-
+            System.out.println("test1: " + (cpu.getMemory().getQueueProcess().size()));
+            System.out.println("test1: " + (0 != cpu.getMemory().getQueueProcess().size()));
+            System.out.println("test2: " + (0 != cpu.getMemory().getInputOutputRequest().size()));
+            System.out.println("test3: " + (cpu.getProcess() != null));
+            
             List<Process> backup = new LinkedList<>();
             for (Process p: memory.getQueueProcess()) {
                 backup.add(p);
@@ -179,86 +135,28 @@ public class ShortTermScheduler {
                 
             }
             
+            orderedMemory.setInputOutputRequest(memory.getInputOutputRequest());
+            orderedMemory.setConcludedProcess(memory.getConcludedProcess());
+            orderedMemory.setProcessLogs(memory.getProcessLogs());
             memory = orderedMemory;
             
             cpu.setMemory(memory);
             
             memory = cpu.cycle();
             
-            System.out.println("\n$$$ REQADY QUEUE OF PROCESSES");
-            for (Process p: memory.getQueueProcess()) {
-                System.err.println("Process " + p.getName());
-            }
-            
-            System.err.println("$$$ IO PROCESS QUEUE");
-            for (Process p: memory.getInputOutputRequest()) {
-                System.err.println("Process " + p.getName());
-            }
-            
-            for (Process io: memory.getInputOutputRequest()) {
-                io.setTimeWaitIO(io.getTimeWaitIO() + 1);
-                Log log = cpu.getLog();
-                if (io.getTimeWaitIO() == io.getIoTime()) {
-                    io.setTimeWaitIO(0);
-                    memory.returnProcessIO(io);
-                    memory.receiveIO(io);
-                    
-                
-                    log.setMemoryIOQueue(memory.getInputOutputRequest());
-                    log.setMemoryReadyQueue(memory.getQueueProcess());
-                    
-                }
-                log.setProcessWaitTimeIO(io.getTimeWaitIO());
-                cpu.setLog(log);
-            }
-            
-            Memory memory2 = new Memory();
-        
-            for (Process p: memory.getQueueProcess()) {
-                String name = p.getName();
-                int ioRequestTime = p.getIoTime();
-                int ioProcessingTime = p.getProcessingTimeIO();
-                int time = p.getTime();
-                String type = p.getType();
-                memory2.addProcess(name, ioRequestTime, ioProcessingTime, time, type);
-            }
-            
-            for (Process p: memory.getInputOutputRequest()) {
-                String name = p.getName();
-                int ioRequestTime = p.getIoTime();
-                int ioProcessingTime = p.getProcessingTimeIO();
-                int time = p.getTime();
-                int timeWaitIO = p.getTimeWaitIO();
-                String type = p.getType();
-                memory2.addProcessIO(name, ioRequestTime, ioProcessingTime, time, timeWaitIO, type);
-            }
-            
-            for (Process p: memory.getConcludedProcess()) {
-                String name = p.getName();
-                int ioRequestTime = p.getIoTime();
-                int ioProcessingTime = p.getProcessingTimeIO();
-                int time = p.getTime();
-                String type = p.getType();
-                memory2.addProcessConcluded(name, ioRequestTime, ioProcessingTime, time, type);
-            }
-            
-            memory = new Memory(memory2.getInputOutputRequest(), memory2.getQueueProcess(), memory2.getConcludedProcess());
-            
-            cpu.setMemory(memory);
-                        
-            logs.add(count++, cpu.getLog());
-            cpu.clearLog();
+            test();
             
         }
     }
 
-    /**
-     *
-     */
     private void priority() {
         
         while (0 != cpu.getMemory().getQueueProcess().size() || 0 != cpu.getMemory().getInputOutputRequest().size() || cpu.getProcess() != null){
-
+            System.out.println("test1: " + (cpu.getMemory().getQueueProcess().size()));
+            System.out.println("test1: " + (0 != cpu.getMemory().getQueueProcess().size()));
+            System.out.println("test2: " + (0 != cpu.getMemory().getInputOutputRequest().size()));
+            System.out.println("test3: " + (cpu.getProcess() != null));
+            
             List<Process> backup = new LinkedList<>();
             for (Process p: memory.getQueueProcess()) {
                 backup.add(p);
@@ -280,165 +178,85 @@ public class ShortTermScheduler {
                 
             }
             
+            orderedMemory.setInputOutputRequest(memory.getInputOutputRequest());
+            orderedMemory.setConcludedProcess(memory.getConcludedProcess());
+            orderedMemory.setProcessLogs(memory.getProcessLogs());
             memory = orderedMemory;
             
             cpu.setMemory(memory);
             
             memory = cpu.cycle();
             
-            System.out.println("\n$$$ REQADY QUEUE OF PROCESSES");
-            for (Process p: memory.getQueueProcess()) {
-                System.err.println("Process " + p.getName());
-            }
+            test();
             
-            System.err.println("$$$ IO PROCESS QUEUE");
-            for (Process p: memory.getInputOutputRequest()) {
-                System.err.println("Process " + p.getName());
-            }
+            if (cpu.getCycle() > 200)
+                break;
             
-            for (Process io: memory.getInputOutputRequest()) {
-                io.setTimeWaitIO(io.getTimeWaitIO() + 1);
-                Log log = cpu.getLog();
-                if (io.getTimeWaitIO() == io.getIoTime()) {
-                    io.setTimeWaitIO(0);
-                    memory.returnProcessIO(io);
-                    memory.receiveIO(io);
-                    
-                
-                    log.setMemoryIOQueue(memory.getInputOutputRequest());
-                    log.setMemoryReadyQueue(memory.getQueueProcess());
-                    
-                }
-                log.setProcessWaitTimeIO(io.getTimeWaitIO());
-                cpu.setLog(log);
-            }
-            
-            Memory memory2 = new Memory();
-        
-            for (Process p: memory.getQueueProcess()) {
-                String name = p.getName();
-                int ioRequestTime = p.getIoTime();
-                int ioProcessingTime = p.getProcessingTimeIO();
-                int priority = p.getPriority();
-                int time = p.getTime();
-                String type = p.getType();
-                memory2.addProcessPriority(name, ioRequestTime, ioProcessingTime, priority, time, type);
-            }
-            
-            for (Process p: memory.getInputOutputRequest()) {
-                String name = p.getName();
-                int ioRequestTime = p.getIoTime();
-                int ioProcessingTime = p.getProcessingTimeIO();
-                int priority = p.getPriority();
-                int time = p.getTime();
-                int timeWaitIO = p.getTimeWaitIO();
-                String type = p.getType();
-                memory2.addProcessIOPriority(name, ioRequestTime, ioProcessingTime, priority, time, timeWaitIO, type);
-            }
-            
-            for (Process p: memory.getConcludedProcess()) {
-                String name = p.getName();
-                int ioRequestTime = p.getIoTime();
-                int ioProcessingTime = p.getProcessingTimeIO();
-                int priority = p.getPriority();
-                int time = p.getTime();
-                String type = p.getType();
-                memory2.addProcessConcludedPriority(name, ioRequestTime, ioProcessingTime, priority, time, type);
-            }
-            
-            memory = new Memory(memory2.getInputOutputRequest(), memory2.getQueueProcess(), memory2.getConcludedProcess());
-            
-            cpu.setMemory(memory);
-            
-//            Queue<Process> concludQueue = cpu.getMemory().getConcludedProcess();
-            
-            logs.add(count++, cpu.getLog());
-            cpu.clearLog();
-            
-//            Log log = cpu.getLog();
-//            log.setMemoryConcludedQueue(concludQueue);
-//            cpu.setLog(log);
         }
 
     }
 
-    /**
-     *
-     */
-    private void fcfs() {
-        while (0 != cpu.getMemory().getQueueProcess().size() || 0 != cpu.getMemory().getInputOutputRequest().size() || cpu.getProcess() != null){
-
-            memory = cpu.cycle();
-            
-            System.out.println("\n$$$ REQADY QUEUE OF PROCESSES");
-            for (Process p: memory.getQueueProcess()) {
-                System.err.println("Process " + p.getName());
-            }
-            
-            System.err.println("$$$ IO PROCESS QUEUE");
-            for (Process p: memory.getInputOutputRequest()) {
-                System.err.println("Process " + p.getName());
-            }
-            
-            for (Process io: memory.getInputOutputRequest()) {
-                io.setTimeWaitIO(io.getTimeWaitIO() + 1);
-                Log log = cpu.getLog();
-                if (io.getTimeWaitIO() == io.getIoTime()) {
-                    io.setTimeWaitIO(0);
-                    memory.returnProcessIO(io);
-                    memory.receiveIO(io);
-                    
-                
-                    log.setMemoryIOQueue(memory.getInputOutputRequest());
-                    log.setMemoryReadyQueue(memory.getQueueProcess());
-                    
-                }
-                log.setProcessWaitTimeIO(io.getTimeWaitIO());
-                cpu.setLog(log);
-            }
-            
-            Memory memory2 = new Memory();
+    
+    
+    public void test(){
         
-            for (Process p: memory.getQueueProcess()) {
-                String name = p.getName();
-                int ioRequestTime = p.getIoTime();
-                int ioProcessingTime = p.getProcessingTimeIO();
-                int time = p.getTime();
-                String type = p.getType();
-                memory2.addProcess(name, ioRequestTime, ioProcessingTime, time, type);
+        for (Process io: memory.getInputOutputRequest()) {
+            System.out.println(io.getName() + " " + io.getTimeWaitIO() + " " + io.getIoTime());
+            io.setTimeWaitIO(io.getTimeWaitIO() + 1);
+            System.out.println(io.getTimeWaitIO());
+            Log log = cpu.getLog();
+            if (io.getTimeWaitIO() == io.getIoTime()) {
+                io.setTimeWaitIO(0);
+                memory.returnProcessIO(io);
+                memory.receiveIO(io);
+
+                log.setMemoryIOQueue(memory.getInputOutputRequest());
+                log.setMemoryReadyQueue(memory.getQueueProcess());
+
             }
-            
-            for (Process p: memory.getInputOutputRequest()) {
-                String name = p.getName();
-                int ioRequestTime = p.getIoTime();
-                int ioProcessingTime = p.getProcessingTimeIO();
-                int time = p.getTime();
-                int timeWaitIO = p.getTimeWaitIO();
-                String type = p.getType();
-                memory2.addProcessIO(name, ioRequestTime, ioProcessingTime, time, timeWaitIO, type);
-            }
-            
-            for (Process p: memory.getConcludedProcess()) {
-                String name = p.getName();
-                int ioRequestTime = p.getIoTime();
-                int ioProcessingTime = p.getProcessingTimeIO();
-                int time = p.getTime();
-                String type = p.getType();
-                memory2.addProcessConcluded(name, ioRequestTime, ioProcessingTime, time, type);
-            }
-            
-            memory = new Memory(memory2.getInputOutputRequest(), memory2.getQueueProcess(), memory2.getConcludedProcess());
-            
-            cpu.setMemory(memory);
-            
-//            Queue<Process> concludQueue = cpu.getMemory().getConcludedProcess();
-            
-            logs.add(count++, cpu.getLog());
-            cpu.clearLog();
-            
-//            Log log = cpu.getLog();
-//            log.setMemoryConcludedQueue(concludQueue);
-//            cpu.setLog(log);
+            log.setProcessWaitTimeIO(io.getTimeWaitIO());
+            cpu.setLog(log);
         }
+        
+        Memory memory2 = new Memory();
+        
+        for (Process p: memory.getQueueProcess()) {
+            String name = p.getName();
+            int ioRequestTime = p.getIoTime();
+            int priority = p.getPriority();
+            int ioProcessingTime = p.getProcessingTimeIO();
+            int time = p.getTime();
+            String type = p.getType();
+            memory2.addProcess(name, ioRequestTime, ioProcessingTime, priority, time, type);
+        }
+
+        for (Process p: memory.getInputOutputRequest()) {
+            String name = p.getName();
+            int ioRequestTime = p.getIoTime();
+            int ioProcessingTime = p.getProcessingTimeIO();
+            int priority = p.getPriority();
+            int time = p.getTime();
+            int timeWaitIO = p.getTimeWaitIO();
+            String type = p.getType();
+            memory2.addProcessIOPriority(name, ioRequestTime, ioProcessingTime, priority, time, timeWaitIO, type);
+        }
+
+        for (Process p: memory.getConcludedProcess()) {
+            String name = p.getName();
+            int ioRequestTime = p.getIoTime();
+            int ioProcessingTime = p.getProcessingTimeIO();
+            int priority = p.getPriority();
+            int time = p.getTime();
+            String type = p.getType();
+            memory2.addProcessConcluded(name, ioRequestTime, ioProcessingTime, priority, time, type);
+        }
+        
+        memory2.setProcessLogs(memory.getProcessLogs());
+        memory = new Memory(memory2.getInputOutputRequest(), memory2.getQueueProcess(), memory2.getConcludedProcess());
+        memory.setProcessLogs(memory2.getProcessLogs());
+        cpu.setMemory(memory);        
+        
+        logs.add(count++, cpu.getLog());
+        cpu.clearLog();
     }
 }

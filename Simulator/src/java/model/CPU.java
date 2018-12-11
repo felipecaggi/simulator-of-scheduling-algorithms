@@ -7,22 +7,23 @@ import java.util.Queue;
 public class CPU {
 
 //  CPU attributes
-    private int    contextSwitch;
-    private int    cpuCycle;
-    private int    slice;
-    private String state;
-    private int    processCycle;
-    private List generalLog;
-    private List cycleLog;
+    private int     contextSwitch;
+    private int     cpuCycle;
+    private int     slice;
+    private String  state;
+    private int     processCycle;
+    private List    generalLog;
+    private List    cycleLog;
     
     
     //private int    programCounter;
     //private int    processCycleIO;
     
 //  Relationships
-    private Memory memory;
-    private Process process;
-    private Log log;
+    private Memory      memory;
+    private Process     process;
+    private Log         log;
+    private ProcessLog  processLog;
 
     public CPU() {
         
@@ -162,8 +163,13 @@ public class CPU {
     }
     
     public void pullProcess() {
+        
         process = memory.getProcess();
+        
         if (process != null){
+            processLog  = memory.getProcessLog(process);
+            processLog.setCpuInputCycle(cpuCycle);
+            log.setMessage("+: Process " + process.getName() + " pull to cpu");
             log.setProcessName(process.getName());
             cycleLog.add("+ LOADING CPU PROCESS " + process.getName()  +  ": " + processCycle);
             System.err.printf("+ LOADING CPU PROCESS %s: %d\n",process.getName(), processCycle);
@@ -174,9 +180,10 @@ public class CPU {
         else {
             log.setProcessName(null);
         }
+        
         log.setMemoryReadyQueue(memory.getQueueProcess());
-            log.setMemoryIOQueue(memory.getInputOutputRequest());
-            log.setMemoryConcludedQueue(memory.getConcludedProcess());
+        log.setMemoryIOQueue(memory.getInputOutputRequest());
+        log.setMemoryConcludedQueue(memory.getConcludedProcess());
         
     }
     
@@ -184,6 +191,7 @@ public class CPU {
         process.setTime(process.getTime()-1);
         processCycle += 1;
         cycleLog.add("= CPU EXECUTING PROCESS "+ process.getName() +": " + processCycle);
+        log.setMessage("ex: "+ processCycle  +"º execution cycle of process " + process.getName());
         log.setProcessTime(process.getTime());
         log.setProcessCycle(processCycle);
         log.setMemoryReadyQueue(memory.getQueueProcess());
@@ -198,6 +206,7 @@ public class CPU {
         memory.requestIO(process);
         cycleLog.add("i/o TRANSFERING CPU PROCESS "+ process.getName() +" FOR IO QUEUE: "+ processCycle);
         System.err.printf("i/o TRANSFERING CPU PROCESS %s FOR IO QUEUE: %d\n",process.getName(), processCycle);
+        log.setMessage("i/o: Process " + process.getName() + " transfering for io queue");
         process = null;
         state = "idle";
         log.setCpuState(state);
@@ -211,9 +220,13 @@ public class CPU {
     
     public void pushProcess() {
         startContextSwitch();
+        
         memory.returnProcess(process);
+        memory.returnProcessLog(processLog);
+        
         cycleLog.add("- REMOVING CPU PROCESS "+ process.getName() +": " + processCycle);
         System.err.printf("- REMOVING CPU PROCESS %s: %d\n",process.getName(), processCycle);
+        log.setMessage("-: process " + process.getName() + " removing to cpu and return to ready queue");
         process = null;
         state = "idle";
         log.setCpuState(state);
@@ -226,12 +239,19 @@ public class CPU {
     
     public void concludeProcess() {
         startContextSwitch();
+
+        processLog.setCpuOutputCycle(cpuCycle);
+        
+        memory.returnProcessLog(processLog);
         memory.concludedProcess(process);
+        
         cycleLog.add("ok PROCESS CONCLUDED "+ process.getName() +": "+ processCycle);
         System.err.printf("ok PROCESS CONCLUDED %s: %d\n",process.getName(), processCycle);
+        log.setMessage("ok: process " + process.getName() + " conclude and transfering to conclude queue");
         process = null;
         state = "idle";
         log.setCpuState(state);
+        
         log.setMemoryReadyQueue(memory.getQueueProcess());
         log.setMemoryIOQueue(memory.getInputOutputRequest());
         log.setMemoryConcludedQueue(memory.getConcludedProcess());
@@ -240,7 +260,7 @@ public class CPU {
     }
     
     public void startContextSwitch() {
-        cycleLog.add("@ CONTEXT SWITCH");
+       cycleLog.add("@ CONTEXT SWITCH");
        System.err.println("@ CONTEXT SWITCH");
        cpuCycle += contextSwitch-1;
     }    

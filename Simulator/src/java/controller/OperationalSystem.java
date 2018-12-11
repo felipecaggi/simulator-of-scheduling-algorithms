@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import model.CPU;
 import model.Memory;
 import model.Process;
+import model.ProcessLog;
 import model.ShortTermScheduler;
 
 /**
@@ -104,6 +105,21 @@ public class OperationalSystem extends HttpServlet {
         request.getSession().setAttribute("powerOn", true);
         request.getSession().setAttribute("play", false);
         
+        ioRequestTime = 0;
+        ioProcessingTime = 0;
+    
+        memory = null;
+        memory2 = null;
+        scheduler = null;
+        cpu = null;
+    
+        indexLog = 0;
+        
+        request.getSession().setAttribute("memory", null);
+        request.getSession().setAttribute("cpu", null);
+        request.getSession().setAttribute("saveSettings", false);
+        request.getSession().setAttribute("statistics", false);
+        
     }
     
     public void algorithmSelected(HttpServletRequest request) {
@@ -122,14 +138,16 @@ public class OperationalSystem extends HttpServlet {
     
     public void addProcess(HttpServletRequest request) {
 
-        if (memory == null) {
+        if (memory == null)
             memory = new Memory();
-        }
-            
+        
         int executionTime = Integer.parseInt(request.getParameter("executionTime"));
         String processType = request.getParameter("process-type");
-        int priority = Integer.parseInt(request.getParameter("priority"));
+        int priority = 0;
         
+        if (request.getSession().getAttribute("algorithm").equals("PRIORITY"))
+            priority = Integer.parseInt(request.getParameter("priority"));
+            
         int amount = memory.getQueueProcess().size();
 
         memory.addProcess(alphabet[amount], priority, executionTime, processType);
@@ -149,8 +167,10 @@ public class OperationalSystem extends HttpServlet {
         
         request.getSession().setAttribute("memory", memory);
         
-        if (memory.getQueueProcess().isEmpty())
-            request.getSession().setAttribute("memoryCreated", false);
+        if (memory.getQueueProcess().isEmpty()){
+            request.getSession().setAttribute("memory", null);
+        }
+            
         
     }
     
@@ -164,8 +184,11 @@ public class OperationalSystem extends HttpServlet {
     }
     
     public void saveSettings(HttpServletRequest request) {
+        int sliceTime = 0;
         
-        int sliceTime = Integer.parseInt(request.getParameter("sliceTime"));
+        if (request.getSession().getAttribute("algorithm").equals("ROUNDROBIN"))
+            sliceTime = Integer.parseInt(request.getParameter("sliceTime"));
+        
         int contextSwitch = Integer.parseInt(request.getParameter("contextSwitch"));
         ioRequestTime = Integer.parseInt(request.getParameter("ioRequestTime"));
         ioProcessingTime = Integer.parseInt(request.getParameter("ioProcessingTime"));
@@ -192,6 +215,7 @@ public class OperationalSystem extends HttpServlet {
         }
         
         memory = memory2;
+        memory.configureLogs();
         
         cpu.setMemory(memory);
         
@@ -214,7 +238,15 @@ public class OperationalSystem extends HttpServlet {
             memory.setQueueProcess(scheduler.getLog(indexLog).getMemoryReadyQueue());
             memory.setInputOutputRequest(scheduler.getLog(indexLog).getMemoryIOQueue());
             memory.setConcludedProcess(scheduler.getLog(indexLog).getMemoryConcludedQueue());
+            memory.setProcessLogs(scheduler.getMemory().getProcessLogs());
             request.getSession().setAttribute("memory", memory);
+        }
+        
+        if (indexLog == scheduler.getLog().size()-1) {
+            request.getSession().setAttribute("play", false);
+            request.getSession().setAttribute("statistics", true);
+            
+            statistics(request);
         }
     }
     
@@ -224,8 +256,23 @@ public class OperationalSystem extends HttpServlet {
             memory.setQueueProcess(scheduler.getLog(indexLog).getMemoryReadyQueue());
             memory.setInputOutputRequest(scheduler.getLog(indexLog).getMemoryIOQueue());
             memory.setConcludedProcess(scheduler.getLog(indexLog).getMemoryConcludedQueue());
+            memory.setProcessLogs(scheduler.getMemory().getProcessLogs());
             request.getSession().setAttribute("memory", memory);
         }
+    }
+    
+    public void statistics(HttpServletRequest request) {
+        
+        int averageWaitTime = 0;
+        
+        for (ProcessLog pl: memory.getProcessLogs()) {
+            averageWaitTime += pl.getMemoryTimeout();
+        }
+        
+        averageWaitTime = averageWaitTime/memory.getProcessLogs().size();
+        
+        request.getSession().setAttribute("averageWaitTime", averageWaitTime);
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

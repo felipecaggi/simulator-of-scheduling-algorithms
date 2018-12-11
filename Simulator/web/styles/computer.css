@@ -45,7 +45,8 @@ body {
     height: 420px;
     border: 30px solid black;
     border-radius: 20px;    
-    background-color: rgb(25,25,25);
+    background-color: black;
+    /*background-color: rgb(25,25,25);*/
     -webkit-box-shadow: 0 2px 6px rgba(0,0,0,.2);
     -moz-box-shadow: 0 2px 6px rgba(0,0,0,.2);
     box-shadow: 0 2px 6px rgba(0,0,0,.2);
@@ -93,14 +94,14 @@ body {
     .algorithms input[type=submit] {
         font-size: 20pt;
         font-weight: bold; 
-        color: white;
-        background-color: green;
+        color: black;
+        background-color: white;
         display: table;
         position: absolute;
         height: 45%;
         width: 50%;
-        border: 5px solid black; 
-        border-radius:10px;
+        border: 2px solid whitesmoke; 
+        border-radius:0px;
     }
 
     input[type=submit]:hover {
@@ -128,7 +129,6 @@ body {
         width: 100%;
         height: 10%;
         display: flex;
-        background-color: grey;
     }
     
     a.step {
@@ -224,7 +224,7 @@ body {
     /*-------------------- MEMORY --------------------*/
     .indicate {
         position: absolute;
-        width: 13   0px;
+        width: 130px;
         height: 2px;
         top: 12.5px;
         left: 120px;
@@ -411,7 +411,51 @@ body {
     .room-quantity {
         margin: 15px 0;   
     }
+    
+    /*-------------------- STATISTICS TABLE --------------------*/
 
+    .statistics-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    
+    .statistics-table th, .statistics-table td {
+        color: white;
+    }
+    
+    th, td {
+        border-bottom: 1px solid #e9e9e9;
+        font-size: 14px;
+    }
+
+    tr {
+        display: flex;
+    }
+
+    th.name-collumn, td.name-collumn{
+        flex: 1;
+    }
+
+    th.time-collumn, td.time-collumn{
+        flex: 1;
+    }
+
+    th.type-collumn, td.type-collumn{
+        flex: 1;
+    }
+
+    .name-collumn, .time-collumn, .type-collumn {
+        text-align: center;
+    }
+
+    .room, .total-price-room {
+        padding: 20px 0;
+    }
+
+    .room-quantity {
+        margin: 15px 0;   
+    }
+    
 /*-------------------- ADD PROCESS --------------------*/
 .form {
     background-color: white;
@@ -460,13 +504,19 @@ body {
 }
 
 
-
+    
 
 
     .informations-container {
-        text-align: left;
         background-color: black;
     }
+    
+    .cpu-information p {
+        color: white;
+        font-size: 20pt;
+        text-align: left;
+    }
+    
     .informations-container label {
         text-align: center;
         font-size: 12px;

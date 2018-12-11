@@ -66,11 +66,13 @@
                                             <input type="radio" name="process-type" value="io"><label for="io">I/O Oriented</label><br>    
                                         </div>
                                         
-                                        <div class="priority">
-                                            <label for="priority">Priority</label><br>
-                                            <input type="text" name="priority" id="priority" required><br>
-                                        </div>
-
+                                        <c:if test="${algorithm == 'PRIORITY'}">
+                                            <div class="priority">
+                                                <label for="priority">Priority</label><br>
+                                                <input type="text" name="priority" id="priority" required><br>
+                                            </div>
+                                        </c:if>
+                                        
                                         <input type="submit" value="Add Process">
 
                                     </form>
@@ -90,11 +92,13 @@
 
                                     <!-- Formulário de configurações -->
                                     <form class="form-settings" method="POST" action="${pageContext.request.contextPath}/saveSettings">
-
-                                        <div class="slice-time">
-                                            <label for="sliceTime">Slice Time</label><br>
-                                            <input type="text" name="sliceTime" id="sliceTime" required value="5"><br>
-                                        </div>
+                                        
+                                        <c:if test="${algorithm == 'ROUNDROBIN'}">
+                                            <div class="slice-time">
+                                                <label for="sliceTime">Slice Time</label><br>
+                                                <input type="text" name="sliceTime" id="sliceTime" required value="5"><br>
+                                            </div>
+                                        </c:if>
 
                                         <div class="context-switch">
                                             <label for="contextSwitch">Context Switch</label><br>
@@ -128,63 +132,49 @@
                             <!-- =========================================================================================================================================================================== -->
                             <c:if test="${play == true}">
                                 <div class="informations-container">
+                                    <div class="process-information">
+                                        <table class="statistics-table">
+                                            <tr class="collumns-table">
+                                                <th class="name-collumn">Process name</th>
+                                            </tr>
+                                                
+                                            <tr class="process">
+
+                                                <td class="name-collumn">
+                                                    <div class="name">
+                                                        <p><c:out value="CPU Cycle: ${log.cpuCycle}"/></p>
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+                                            
+
+                                            <c:forEach var="message" items="${log.message}">
+
+
+                                                <%-- Each table row represent a process --%>
+                                                <tr class="process">
+
+                                                    <td class="name-collumn">
+                                                        <div class="name">
+                                                            <p><c:out value="${message}"/></p>
+                                                        </div>
+                                                    </td>
+
+                                                </tr>
+                                            </c:forEach>
+                                        </table>
+                                    </div>
+                                </div>
+                                <%--
+                                <div class="informations-container">
                                     <div class="cpu-information">
-
-                                        <form class="cpu-form">
-                                            <fieldset class="cpu-fildset">
-                                                <legend>CPU DATA</legend>
-
-                                                <div id="input-name" class="input-wrap">
-                                                    <label class="input-wrap-label" for="nome">Context Switch</label>
-                                                    <input type="text" id="nome" value="${log.cpuContextSwitch}" disabled>
-                                                </div>
-
-                                                <div id="input-cpf" class="input-wrap">
-                                                    <label class="input-wrap-label" for="cpf">Slice</label>
-                                                    <input type="text" id="cpf" value="${log.cpuSlice}" disabled>
-                                                </div>
-
-                                                <div id="input-phone" class="input-wrap">
-                                                    <label class="input-wrap-label" for="telefone">State</label>
-                                                    <input type="text" id="telefone" value="${log.cpuState}" disabled>
-                                                </div>
-
-                                                <div id="input-email" class="input-wrap">
-                                                    <label class="input-wrap-label" for="email">cpuCycle</label>
-                                                    <input type="text" id="email" value="${log.cpuCycle}" disabled>
-                                                </div>
-                                            </fieldset>
-                                        </form>
-
-                                        <form class="formulario-cartao">       
-                                            <fieldset class="user">
-                                                <legend>Cartão cadastrado</legend>
-
-                                                <div id="input-titular" class="input-wrap">
-                                                    <label class="input-wrap-label" for="titular">Titular</label>
-                                                    <input type="text" id="titular" value="${usuario.cartao.titular}" disabled>
-                                                </div>
-
-                                                <div id="input-numero-cartao" class="input-wrap">
-                                                    <label class="input-wrap-label" for="numeroCartao">Número do cartão</label>
-                                                    <input type="text" id="numeroCartao" value="${usuario.cartao.numeroCartao}" disabled>
-                                                </div>
-
-                                                <div id="input-vencimento" class="input-wrap">
-                                                    <label class="input-wrap-label" for="dataVencimento">Data vencimento</label>
-                                                    <input type="text" id="dataVencimento" value="${usuario.cartao.vencimento}" disabled>
-                                                </div>
-
-                                                <div id="input-codigo-seguranca" class="input-wrap">
-                                                    <label class="input-wrap-label" for="codigoSeguranca">Código de seguranca</label>
-                                                    <input type="text" id="codigoSeguranca" value="${usuario.cartao.codigoSeguranca}" disabled>
-                                                </div>
-                                            </fieldset>
-                                        </form>
-
-                                    </div>           
+                                        <c:forEach var="mensage" items="${log.mensage}">
+                                            <p>${mensage}</p>
+                                        </c:forEach>
+                                    </div>
                                 </div>            
-
+--%>
                                 <div class="docbar">
 
                                     <a class="step back" href="${pageContext.request.contextPath}/back">
@@ -204,21 +194,6 @@
                                     </a>   
                                 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                                 <div class="test">
                                     <c:forEach var="generalLog" items="${cpuConclude.generalLog}">
                                         <c:forEach var="cycleLog" items="${generalLog.cycleLog}">
@@ -227,16 +202,58 @@
                                     </c:forEach>
                                 </div>
                             </c:if>
+                            
+                            <c:if test="${statistics == true}">
+                                <div class="informations-container">
+                                    <div class="process-information">
+                                        <table class="statistics-table">
+                                            <tr class="collumns-table">
+                                                <th class="name-collumn">Process name</th>
+                                                <th class="time-collumn">Memory timeout</th>
+                                                
+                                            </tr>
 
-                            <c:if test="${cpuConclude == null}">
-                                <div class="error">
-                                    ERRO
+                                            <c:forEach var="process" items="${memory.processLogs}">
+
+                                                <%-- Each table row represent a process --%>
+                                                <tr class="process">
+
+                                                    <td class="name-collumn">
+                                                        <div class="name">
+                                                            <p><c:out value="${process.name}"/></p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="time-collumn">
+                                                        <div class="time">
+                                                            <p><c:out value="${process.memoryTimeout}"/></p>
+                                                        </div>
+                                                    </td>
+
+
+                                                </tr>
+                                            </c:forEach>
+                                                <tr class="process">
+                                                    <td class="name-collumn">
+                                                        <div>
+                                                            <p><c:out value="Average wait time"/></p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="time-collumn">
+                                                        <div>
+                                                            <p><c:out value="${averageWaitTime}"/></p>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                        </table>
+                                    </div>
                                 </div>
+
                             </c:if>
+
                             <!-- =========================================================================================================================================================================== -->
                             <!-- =========================================================================================================================================================================== -->
                             <!-- =========================================================================================================================================================================== -->                            
-                            <c:if test="${play == false}">
+                            <c:if test="${play == false && (statistics == false || statistics == null)}">
                                 <div class="docbar">
                                     <a class="step" href="${pageContext.request.contextPath}/powerOn">
                                         <div class="step1">
@@ -273,7 +290,7 @@
 
 
                     <div class="computer-gabinet">
-                        <c:if test="${memoryCreated}">
+                        <c:if test="${memory != null}">
 
                             <div class="memory">
                                 <div class="indicate"></div>
@@ -406,6 +423,7 @@
                             </div>
                         </c:if>
                         
+                        <c:if test="${saveSettings == true}">
                         <div class="cpu">
                             <div class="cpu-chip">
                                 <div class="cpu-process">
@@ -434,10 +452,11 @@
                                     <div class="connector4"></div>
                                 </div>
                             </div>
-                            
+
+
                             <div class="cpu-settings">
                                 <form class="process-form">
-                                 
+
                                         <div id="process-cycle" class="process-cycle">                      
                                             <input type="text" id="nome" value="${log.processCycle}" disabled>
                                             <label class="input-wrap-label" for="nome">Process Cycle</label>
@@ -446,42 +465,40 @@
                                             <input type="text" id="nome" value="${log.processTime}" disabled>
                                             <label class="input-wrap-label" for="nome">Time Left</label>
                                         </div>
-                                 
+
                                 </form>
-                                
+
                                 <form class="cpu-form">
 
+                                    <div id="input-name" class="input-wrap">
+                                        <label class="input-wrap-label" for="nome">Context Switch</label>
+                                        <input type="text" id="nome" value="${log.cpuContextSwitch}" disabled>
+                                    </div>
 
-                                        <div id="input-name" class="input-wrap">
-                                            <label class="input-wrap-label" for="nome">Context Switch</label>
-                                            <input type="text" id="nome" value="${log.cpuContextSwitch}" disabled>
-                                        </div>
+                                    <c:if test="${algorithm == 'PRIORITY'}">
 
                                         <div id="input-cpf" class="input-wrap">
                                             <label class="input-wrap-label" for="cpf">Slice</label>
                                             <input type="text" id="cpf" value="${log.cpuSlice}" disabled>
                                         </div>
+                                    </c:if>
 
-                                        <div id="input-phone" class="input-wrap">
-                                            <label class="input-wrap-label" for="telefone">State</label>
-                                            <input type="text" id="telefone" value="${log.cpuState}" disabled>
-                                        </div>
+                                    <div id="input-phone" class="input-wrap">
+                                        <label class="input-wrap-label" for="telefone">State</label>
+                                        <input type="text" id="telefone" value="${log.cpuState}" disabled>
+                                    </div>
 
-                                        <div id="input-email" class="input-wrap">
-                                            <label class="input-wrap-label" for="email">CPU Cycle</label>
-                                            <input type="text" id="email" value="${log.cpuCycle}" disabled>
-                                        </div>
+                                    <div id="input-email" class="input-wrap">
+                                        <label class="input-wrap-label" for="email">CPU Cycle</label>
+                                        <input type="text" id="email" value="${log.cpuCycle}" disabled>
+                                    </div>
 
                                 </form>
-                            </div>
-                                
-                            </div>
+                            </div>    
+                        </div>
+                        </c:if>
                             
-                        
-
-                        <a class="power-button" href="${pageContext.request.contextPath}/powerOn">
-
-                        </a>
+                        <a class="power-button" href="${pageContext.request.contextPath}/powerOn"></a>
                     </div>
                 </div>
             </div>
