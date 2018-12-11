@@ -200,6 +200,9 @@ public class CPU {
     }
     
     public void executeProcess() {
+        ProcessLog pl = memory.getProcessLog(process);
+        pl.setTurnaroundTime(pl.getTurnaroundTime()+1);
+        memory.returnProcessLog(pl);
         process.setTime(process.getTime()-1);
         processCycle += 1;
         cycleLog.add("= CPU EXECUTING PROCESS "+ process.getName() +": " + processCycle);

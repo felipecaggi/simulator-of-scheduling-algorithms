@@ -93,7 +93,7 @@ public class ShortTermScheduler {
             
             test();
             
-            if (cpu.getCycle() > 200)
+            if (cpu.getCycle() > 1000)
                 break;
         }        
         
@@ -106,6 +106,8 @@ public class ShortTermScheduler {
             
             test();
             
+            if (cpu.getCycle() > 1000)
+                break;
         }
     }
 
@@ -147,6 +149,9 @@ public class ShortTermScheduler {
             memory = cpu.cycle();
             
             test();
+            
+            if (cpu.getCycle() > 1000)
+                break;
             
         }
     }
@@ -191,7 +196,7 @@ public class ShortTermScheduler {
             
             test();
             
-            if (cpu.getCycle() > 200)
+            if (cpu.getCycle() > 1000)
                 break;
             
         }
