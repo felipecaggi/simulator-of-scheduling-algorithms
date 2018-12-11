@@ -263,17 +263,69 @@ public class OperationalSystem extends HttpServlet {
     
     public void statistics(HttpServletRequest request) {
         
-        int averageWaitTime = 0;
+//        int averageWaitTime = 0;
+//        
+//        for (ProcessLog pl: memory.getProcessLogs()) {
+//            averageWaitTime += pl.getMemoryTimeout();
+//        }
+//        
+//        averageWaitTime = averageWaitTime/memory.getProcessLogs().size();
+//        
+//        request.getSession().setAttribute("averageWaitTime", averageWaitTime);
+        
+//--------------------------------- Average Memory Timeout ---------------------------------
+
+        float averageMemoryTimeout = 0;
         
         for (ProcessLog pl: memory.getProcessLogs()) {
-            averageWaitTime += pl.getMemoryTimeout();
+            averageMemoryTimeout += pl.getMemoryTimeout();
         }
         
-        averageWaitTime = averageWaitTime/memory.getProcessLogs().size();
+        averageMemoryTimeout = averageMemoryTimeout/memory.getProcessLogs().size();
+
+        request.getSession().setAttribute("averageMemoryTimeout", averageMemoryTimeout);
         
-        request.getSession().setAttribute("averageWaitTime", averageWaitTime);
+//--------------------------------- Average CPU Response Time ---------------------------------
+        
+        float averageCpuResponseTime = 0;
+        
+        for (ProcessLog pl: memory.getProcessLogs()) {
+            averageCpuResponseTime += pl.getCpuInputCycle();
+        }
+        
+        averageCpuResponseTime = averageCpuResponseTime/memory.getProcessLogs().size();
+
+        request.getSession().setAttribute("averageCpuResponseTime", averageCpuResponseTime);
+     
+//--------------------------------- Average Turnaround Time ---------------------------------
+        
+        float averageTurnaroundTime = 0;
+        
+        for (ProcessLog pl: memory.getProcessLogs()) {
+            averageTurnaroundTime += pl.getTurnaroundTime();
+        }
+        
+        averageTurnaroundTime = averageTurnaroundTime/memory.getProcessLogs().size();
+
+        request.getSession().setAttribute("averageTurnaroundTime", averageTurnaroundTime);
+
+//--------------------------------- CPU throughput ---------------------------------
+    
+        float cpuTroughput = 0;
+        
+        for (ProcessLog pl: memory.getProcessLogs()) {
+            cpuTroughput += pl.getCpuOutputCycle();
+        }
+        
+        cpuTroughput = cpuTroughput/memory.getProcessLogs().size();
+
+        request.getSession().setAttribute("cpuTroughput", cpuTroughput);
+
+//--------------------------------- CPU throughput ---------------------------------            
         
     }
+
+
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

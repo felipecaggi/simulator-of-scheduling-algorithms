@@ -210,6 +210,9 @@
                                             <tr class="collumns-table">
                                                 <th class="name-collumn">Process name</th>
                                                 <th class="time-collumn">Memory timeout</th>
+                                                <th class="time-collumn">CPU input cycle</th>
+                                                <th class="time-collumn">CPU output cycle</th>
+                                                <th class="time-collumn">Turnaround time</th>
                                                 
                                             </tr>
 
@@ -228,6 +231,21 @@
                                                             <p><c:out value="${process.memoryTimeout}"/></p>
                                                         </div>
                                                     </td>
+                                                    <td class="time-collumn">
+                                                        <div class="time">
+                                                            <p><c:out value="${process.cpuInputCycle}"/></p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="time-collumn">
+                                                        <div class="time">
+                                                            <p><c:out value="${process.cpuOutputCycle}"/></p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="time-collumn">
+                                                        <div class="time">
+                                                            <p><c:out value="${process.turnaroundTime}"/></p>
+                                                        </div>
+                                                    </td>
 
 
                                                 </tr>
@@ -235,15 +253,68 @@
                                                 <tr class="process">
                                                     <td class="name-collumn">
                                                         <div>
-                                                            <p><c:out value="Average wait time"/></p>
+                                                            <p><c:out value="Average memory timeout"/></p>
                                                         </div>
                                                     </td>
                                                     <td class="time-collumn">
                                                         <div>
-                                                            <p><c:out value="${averageWaitTime}"/></p>
+                                                            <p><c:out value="${averageMemoryTimeout}"/></p>
                                                         </div>
                                                     </td>
+                                                    <td class="name-collumn"></td>
+                                                    <td class="name-collumn"></td>
+                                                    <td class="name-collumn"></td>
                                                 </tr>
+                                                
+                                                <tr class="process">
+                                                    <td class="name-collumn">
+                                                        <div>
+                                                            <p><c:out value="Average CPU Response Time"/></p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="name-collumn"></td>
+                                                    <td class="time-collumn">
+                                                        <div>
+                                                            <p><c:out value="${averageCpuResponseTime}"/></p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="name-collumn"></td>
+                                                    <td class="name-collumn"></td>
+                                                </tr>
+
+                                                <tr class="process">
+                                                    <td class="name-collumn">
+                                                        <div>
+                                                            <p><c:out value="CPU throughput"/></p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="name-collumn"></td>
+                                                    <td class="name-collumn"></td>
+                                                    <td class="time-collumn">
+                                                        <div>
+                                                            <p><c:out value="${cpuTroughput}"/></p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="name-collumn"></td>
+                                                </tr>
+                                                
+                                                <tr class="process">
+                                                    <td class="name-collumn">
+                                                        <div>
+                                                            <p><c:out value="Average Turnaround Time"/></p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="name-collumn"></td>
+                                                    <td class="name-collumn"></td>
+                                                    <td class="name-collumn"></td>
+                                                    <td class="time-collumn">
+                                                        <div>
+                                                            <p><c:out value="${averageTurnaroundTime}"/></p>
+                                                        </div>
+                                                    </td>
+                                                </tr> 
+                                                
+                                                                                          
                                         </table>
                                     </div>
                                 </div>
@@ -475,7 +546,7 @@
                                         <input type="text" id="nome" value="${log.cpuContextSwitch}" disabled>
                                     </div>
 
-                                    <c:if test="${algorithm == 'PRIORITY'}">
+                                    <c:if test="${algorithm == 'ROUNDROBIN'}">
 
                                         <div id="input-cpf" class="input-wrap">
                                             <label class="input-wrap-label" for="cpf">Slice</label>

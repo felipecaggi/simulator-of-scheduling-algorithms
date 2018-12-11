@@ -12,10 +12,10 @@ package model;
 public class ProcessLog {
     
     private String  name;
-    private int     arrivalCycleInMemory;
     private int     memoryTimeout;
     private int     cpuInputCycle;
     private int     cpuOutputCycle;
+    private int     turnaroundTime;
 
 //  ++++++++++ BUILDERS ++++++++++
     
@@ -31,10 +31,6 @@ public class ProcessLog {
         return name;
     }
 
-    public int getArrivalCycleInMemory() {
-        return arrivalCycleInMemory;
-    }
-
     public int getMemoryTimeout() {
         return memoryTimeout;
     }
@@ -47,14 +43,14 @@ public class ProcessLog {
         return cpuOutputCycle;
     }
 
+    public int getTurnaroundTime() {
+        return turnaroundTime;
+    }
+    
 // ++++++++++ SETTERS ++++++++++
     
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setArrivalCycleInMemory(int arrivalCycleInMemory) {
-        this.arrivalCycleInMemory = arrivalCycleInMemory;
     }
 
     public void setMemoryTimeout(int memoryTimeout) {
@@ -62,12 +58,16 @@ public class ProcessLog {
     }
 
     public void setCpuInputCycle(int cpuInputCycle) {
-        this.cpuInputCycle = cpuInputCycle;
-        memoryTimeout = cpuInputCycle - arrivalCycleInMemory;
+        if (this.cpuInputCycle == 0)
+            this.cpuInputCycle = cpuInputCycle;
     }
 
     public void setCpuOutputCycle(int cpuOutputCycle) {
         this.cpuOutputCycle = cpuOutputCycle;
+    }
+
+    public void setTurnaroundTime(int turnaroundTime) {
+        this.turnaroundTime = turnaroundTime;
     }
     
 }

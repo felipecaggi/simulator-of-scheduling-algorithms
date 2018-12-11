@@ -92,7 +92,9 @@ public class ShortTermScheduler {
             memory = cpu.cycle();
             
             test();
-   
+            
+            if (cpu.getCycle() > 200)
+                break;
         }        
         
     }
@@ -250,6 +252,29 @@ public class ShortTermScheduler {
             String type = p.getType();
             memory2.addProcessConcluded(name, ioRequestTime, ioProcessingTime, priority, time, type);
         }
+        
+//--------------------------------- Average Memory Timeout ----------------------------------
+        for (Process p: memory.getQueueProcess()) {
+            ProcessLog pl = memory.getProcessLog(p);
+            pl.setMemoryTimeout(pl.getMemoryTimeout()+1);
+            memory.returnProcessLog(pl);
+        }
+//-------------------------------------------------------------------------------------------
+
+//--------------------------------- Average Turnaround Time ---------------------------------
+        for (Process p: memory.getQueueProcess()) {
+            ProcessLog pl = memory.getProcessLog(p);
+            pl.setTurnaroundTime(pl.getTurnaroundTime()+1);
+            memory.returnProcessLog(pl);
+        }
+        
+        for (Process p: memory.getInputOutputRequest()) {
+            ProcessLog pl = memory.getProcessLog(p);
+            pl.setTurnaroundTime(pl.getTurnaroundTime()+1);
+            memory.returnProcessLog(pl);
+        }
+        
+//-------------------------------------------------------------------------------------------        
         
         memory2.setProcessLogs(memory.getProcessLogs());
         memory = new Memory(memory2.getInputOutputRequest(), memory2.getQueueProcess(), memory2.getConcludedProcess());

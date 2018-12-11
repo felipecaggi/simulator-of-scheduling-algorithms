@@ -8,13 +8,14 @@ public class CPU {
 
 //  CPU attributes
     private int     contextSwitch;
+    private int     countContextSwitch;
     private int     cpuCycle;
     private int     slice;
     private String  state;
     private int     processCycle;
     private List    generalLog;
     private List    cycleLog;
-    
+    private boolean performingContextSwitch;
     
     //private int    programCounter;
     //private int    processCycleIO;
@@ -31,10 +32,12 @@ public class CPU {
 
     public CPU(int contextSwitch, int slice) {
         this.contextSwitch = contextSwitch;
+        countContextSwitch = contextSwitch;
         this.cpuCycle = 0;
         this.slice = slice;
         state = "idle";
         processCycle = 0;
+        performingContextSwitch = false;
         generalLog = new LinkedList();
         cycleLog = new LinkedList();
         
@@ -98,11 +101,20 @@ public class CPU {
     public Memory cycle() {
         cpuCycle++;
         log.setCpuCycle(cpuCycle);
+        
         System.err.println("\nCPU cycle: "+cpuCycle);
         
-        if (state.equals("idle"))
-        {
-            pullProcess();
+        if (performingContextSwitch == false) {
+        
+            if (state.equals("idle"))
+            {
+                pullProcess();
+            }
+            
+        } else if (performingContextSwitch == true) {
+            
+            startContextSwitch();
+            
         }
         
         if (process != null) {
@@ -233,7 +245,7 @@ public class CPU {
         log.setMemoryReadyQueue(memory.getQueueProcess());
         log.setMemoryIOQueue(memory.getInputOutputRequest());
         log.setMemoryConcludedQueue(memory.getConcludedProcess());
-        processCycle = 0;
+        processCycle = 0;   
         System.err.println("##################################################################");
     }
     
@@ -260,9 +272,30 @@ public class CPU {
     }
     
     public void startContextSwitch() {
+        
+        log.setMessage("(): Performing Context Switch ");
+        
+        if (performingContextSwitch == false)
+            performingContextSwitch = true;
+        
+        if (performingContextSwitch == true) {
+            
+            countContextSwitch--;
+            
+            if (countContextSwitch <= 0){
+                performingContextSwitch = false;
+                countContextSwitch = contextSwitch;
+            }
+
+        }
+        log.setMemoryReadyQueue(memory.getQueueProcess());
+        log.setMemoryIOQueue(memory.getInputOutputRequest());
+        log.setMemoryConcludedQueue(memory.getConcludedProcess());
+            
        cycleLog.add("@ CONTEXT SWITCH");
        System.err.println("@ CONTEXT SWITCH");
-       cpuCycle += contextSwitch-1;
+       
+       
     }    
 
 }

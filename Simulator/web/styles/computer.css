@@ -222,14 +222,14 @@ body {
 
 
     /*-------------------- MEMORY --------------------*/
-    .indicate {
+/*    .indicate {
         position: absolute;
         width: 130px;
         height: 2px;
         top: 12.5px;
         left: 120px;
         background-color: greenyellow;
-    }
+    }*/
 
     .memory {
         width: 120px;
